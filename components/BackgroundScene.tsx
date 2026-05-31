@@ -2,7 +2,7 @@ export default function BackgroundScene() {
   return (
     <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
       {/* Gothic background scene */}
-      <div className="absolute inset-0 flex items-center justify-center opacity-20">
+      <div className="absolute inset-0 flex items-center justify-center opacity-35">
         <svg
           viewBox="0 0 1200 900"
           className="w-full h-full max-w-none"
