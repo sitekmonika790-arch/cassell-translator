@@ -1,26 +1,203 @@
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
-
 @theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
+  --color-background: var(--bg-primary);
+  --color-foreground: var(--text-primary);
+  --font-sans: var(--font-cinzel), var(--font-geist-sans);
   --font-mono: var(--font-geist-mono);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+:root {
+  --bg-primary: #1a0a0a;
+  --bg-secondary: #2a1015;
+  --bg-card: rgba(20, 5, 5, 0.5);
+  --text-primary: #d4b896;
+  --text-secondary: #8b6b5a;
+  --text-muted: #5a3a3a;
+  --gold: #c9a84c;
+  --gold-light: #d4b896;
+  --gold-dim: #8b7355;
+  --border-gold: rgba(201, 168, 76, 0.2);
+  --border-gold-light: rgba(201, 168, 76, 0.35);
+  --accent-red: rgba(180, 50, 50, 0.1);
+  --font-cinzel: "Cinzel", "Georgia", "Times New Roman", serif;
+  --font-body: "Georgia", "Noto Serif SC", "SimSun", "Times New Roman", serif;
+}
+
+* {
+  scrollbar-width: thin;
+  scrollbar-color: var(--border-gold) transparent;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: var(--font-body);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Parchment texture overlay */
+.bg-parchment {
+  background:
+    repeating-linear-gradient(
+      0deg,
+      transparent,
+      transparent 30px,
+      rgba(180, 50, 50, 0.015) 30px,
+      rgba(180, 50, 50, 0.015) 31px
+    ),
+    radial-gradient(
+      ellipse at 50% 20%,
+      rgba(201, 168, 76, 0.04) 0%,
+      transparent 55%
+    ),
+    var(--bg-primary);
+}
+
+/* Gold glow for focused input */
+.input-glow:focus {
+  border-color: var(--border-gold-light);
+  box-shadow: 0 0 20px rgba(201, 168, 76, 0.08), 0 0 3px rgba(201, 168, 76, 0.15);
+  outline: none;
+}
+
+/* Decorative divider */
+.gold-divider {
+  width: 200px;
+  height: 1px;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    var(--gold),
+    transparent
+  );
+}
+
+/* Breathing glow for emblem */
+@keyframes breathe {
+  0%, 100% {
+    box-shadow: 0 0 8px rgba(201, 168, 76, 0.15);
+  }
+  50% {
+    box-shadow: 0 0 18px rgba(201, 168, 76, 0.3);
+  }
+}
+
+.emblem-glow {
+  animation: breathe 3s ease-in-out infinite;
+}
+
+/* Fade in animation */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(12px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fadeIn 0.8s ease-out forwards;
+}
+
+.animate-fade-in-delay-1 {
+  animation: fadeIn 0.8s ease-out 0.2s forwards;
+  opacity: 0;
+}
+
+.animate-fade-in-delay-2 {
+  animation: fadeIn 0.8s ease-out 0.4s forwards;
+  opacity: 0;
+}
+
+.animate-fade-in-delay-3 {
+  animation: fadeIn 0.8s ease-out 0.6s forwards;
+  opacity: 0;
+}
+
+/* Dust particle animation */
+@keyframes float {
+  0%, 100% {
+    transform: translateY(0) translateX(0);
+    opacity: 0;
+  }
+  10% {
+    opacity: 0.5;
+  }
+  90% {
+    opacity: 0.5;
+  }
+  100% {
+    transform: translateY(-100vh) translateX(20px);
+    opacity: 0;
+  }
+}
+
+.dust-particle {
+  position: fixed;
+  width: 1px;
+  height: 1px;
+  background: var(--gold);
+  border-radius: 50%;
+  animation: float linear infinite;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Selection colors */
+::selection {
+  background: rgba(201, 168, 76, 0.25);
+  color: var(--gold-light);
+}
+
+::-moz-selection {
+  background: rgba(201, 168, 76, 0.25);
+  color: var(--gold-light);
+}
+
+/* Copy button transition */
+.copy-btn {
+  transition: all 0.2s ease;
+}
+
+.copy-btn:hover {
+  color: var(--gold);
+  border-color: var(--border-gold-light);
+}
+
+/* Decorative corner marks */
+.corner-mark::before,
+.corner-mark::after {
+  content: "✠";
+  position: absolute;
+  font-size: 10px;
+  color: var(--text-muted);
+}
+
+.corner-mark::before {
+  top: 8px;
+  left: 12px;
+}
+
+.corner-mark::after {
+  top: 8px;
+  right: 12px;
+}
+
+/* Spinning loader */
+@keyframes spin {
+  to { transform: rotate(360deg); }
+}
+
+.loader {
+  width: 18px;
+  height: 18px;
+  border: 2px solid var(--border-gold);
+  border-top-color: var(--gold);
+  border-radius: 50%;
+  animation: spin 0.8s linear infinite;
 }
