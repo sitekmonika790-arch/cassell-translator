@@ -188,6 +188,47 @@ body {
   right: 12px;
 }
 
+/* Portrait positioning */
+.portrait-left {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  width: 22%;
+  min-width: 160px;
+  max-width: 300px;
+  opacity: 0.12;
+  transition: opacity 0.6s ease;
+}
+
+.portrait-right {
+  position: absolute;
+  right: 0;
+  top: 0;
+  bottom: 0;
+  width: 22%;
+  min-width: 160px;
+  max-width: 300px;
+  opacity: 0.12;
+  transition: opacity 0.6s ease;
+}
+
+@media (max-width: 768px) {
+  .portrait-left,
+  .portrait-right {
+    opacity: 0.05;
+    width: 15%;
+    min-width: 80px;
+  }
+}
+
+@media (max-width: 480px) {
+  .portrait-left,
+  .portrait-right {
+    display: none;
+  }
+}
+
 /* Spinning loader */
 @keyframes spin {
   to { transform: rotate(360deg); }
