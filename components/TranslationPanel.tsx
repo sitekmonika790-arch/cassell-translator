@@ -9,8 +9,6 @@ export default function TranslationPanel() {
   const [output, setOutput] = useState("")
   const [status, setStatus] = useState<Status>("idle")
   const [error, setError] = useState("")
-  const [fromLang, setFromLang] = useState("中文")
-  const [toLang, setToLang] = useState("ENGLISH")
   const [copied, setCopied] = useState(false)
   const timerRef = useRef<ReturnType<typeof setTimeout> | null>(null)
 
@@ -38,8 +36,6 @@ export default function TranslationPanel() {
       }
 
       setOutput(data.translation)
-      setFromLang(data.from === "zh" ? "中文" : "ENGLISH")
-      setToLang(data.to === "zh" ? "中文" : "ENGLISH")
       setStatus("done")
     } catch (err) {
       setError(err instanceof Error ? err.message : "翻译失败，请稍后重试")
@@ -83,11 +79,6 @@ export default function TranslationPanel() {
       <div className="flex flex-col sm:flex-row items-stretch gap-3 sm:gap-4">
         {/* Input column */}
         <div className="flex-1 flex flex-col">
-          <div className="text-center mb-2">
-            <span className="text-[10px] sm:text-xs tracking-[0.25em] text-[#c9a84c] font-[serif] select-none">
-              {fromLang}
-            </span>
-          </div>
           <textarea
             value={input}
             onChange={handleInput}
@@ -107,11 +98,6 @@ export default function TranslationPanel() {
 
         {/* Output column */}
         <div className="flex-1 flex flex-col">
-          <div className="text-center mb-2">
-            <span className="text-[10px] sm:text-xs tracking-[0.25em] text-[#c9a84c] font-[serif] select-none">
-              {toLang}
-            </span>
-          </div>
           <div className="relative flex-1 min-h-[140px] bg-[rgba(20,5,5,0.5)] border border-[rgba(201,168,76,0.2)] rounded-sm p-4">
             {/* Loading */}
             {status === "loading" && (
