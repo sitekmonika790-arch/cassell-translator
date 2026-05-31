@@ -7,6 +7,7 @@ type Status = "idle" | "loading" | "done" | "error"
 export default function TranslationPanel() {
   const [input, setInput] = useState("")
   const [output, setOutput] = useState("")
+  const [alternatives, setAlternatives] = useState<string[]>([])
   const [status, setStatus] = useState<Status>("idle")
   const [error, setError] = useState("")
   const [copied, setCopied] = useState(false)
@@ -36,6 +37,7 @@ export default function TranslationPanel() {
       }
 
       setOutput(data.translation)
+      setAlternatives(data.alternatives || [])
       setStatus("done")
     } catch (err) {
       setError(err instanceof Error ? err.message : "翻译失败，请稍后重试")
@@ -52,6 +54,7 @@ export default function TranslationPanel() {
 
       if (!text.trim()) {
         setOutput("")
+        setAlternatives([])
         setStatus("idle")
         return
       }
@@ -115,9 +118,16 @@ export default function TranslationPanel() {
 
             {/* Translation result */}
             {status === "done" && (
-              <p className="text-[#d4b896] text-sm whitespace-pre-wrap font-[serif]">
-                {output}
-              </p>
+              <div>
+                <p className="text-[#d4b896] text-sm whitespace-pre-wrap font-[serif]">
+                  {output}
+                </p>
+                {alternatives.length > 0 && (
+                  <p className="text-[#8b6b5a] text-xs mt-2 italic font-[serif]">
+                    也作：{alternatives.join("  ·  ")}
+                  </p>
+                )}
+              </div>
             )}
 
             {/* Idle placeholder */}

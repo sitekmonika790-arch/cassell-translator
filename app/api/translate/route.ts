@@ -22,7 +22,7 @@ export async function POST(request: Request) {
     const from = detectLanguage(text)
     const to = from === "zh" ? "en" : "zh"
 
-    const url = `https://api.mymemory.translated.net/get?q=${encodeURIComponent(text.trim())}&langpair=${from}|${to}`
+    const url = `https://translate.googleapis.com/translate_a/single?client=gtx&sl=${from}&tl=${to}&dt=t&dt=at&q=${encodeURIComponent(text.trim())}`
 
     const res = await fetch(url, { signal: AbortSignal.timeout(10000) })
 
@@ -35,10 +35,28 @@ export async function POST(request: Request) {
 
     const data = await res.json()
 
+    const translation = data[0]
+      .filter((item: unknown[]) => item[0])
+      .map((item: string[]) => item[0])
+      .join("")
+
+    // Parse alternative translations from dt=at response
+    const alternatives: string[] = []
+    const altData = data[5]
+    if (altData && altData[0] && altData[0][2]) {
+      for (const alt of altData[0][2]) {
+        const altText = alt[0] as string
+        if (altText && altText !== translation && !alternatives.includes(altText)) {
+          alternatives.push(altText)
+        }
+      }
+    }
+
     return NextResponse.json({
-      translation: data.responseData.translatedText,
+      translation,
       from,
       to,
+      ...(alternatives.length > 0 && { alternatives }),
     })
   } catch (err) {
     if (err instanceof DOMException && err.name === "TimeoutError") {
