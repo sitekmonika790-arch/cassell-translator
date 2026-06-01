@@ -8,18 +8,18 @@
 }
 
 :root {
-  --bg-primary: #1f1012;
-  --bg-secondary: #2d1518;
-  --bg-card: rgba(30, 10, 12, 0.5);
-  --text-primary: #d4b896;
-  --text-secondary: #8b6b5a;
-  --text-muted: #5a3a3a;
-  --gold: #c9a84c;
-  --gold-light: #d4b896;
-  --gold-dim: #8b7355;
-  --border-gold: rgba(201, 168, 76, 0.2);
-  --border-gold-light: rgba(201, 168, 76, 0.35);
-  --accent-red: rgba(180, 50, 50, 0.1);
+  --bg-primary: #f0e6d2;
+  --bg-secondary: #e5d8be;
+  --bg-card: rgba(255, 250, 240, 0.85);
+  --text-primary: #2a1a0a;
+  --text-secondary: #5a4530;
+  --text-muted: #8a7050;
+  --gold: #a8842c;
+  --gold-light: #c9a84c;
+  --gold-dim: #8a6a3a;
+  --border-gold: rgba(168, 132, 44, 0.35);
+  --border-gold-light: rgba(168, 132, 44, 0.55);
+  --accent-red: rgba(180, 50, 50, 0.15);
   --font-cinzel: "Cinzel", "Georgia", "Times New Roman", serif;
   --font-body: "Georgia", "Noto Serif SC", "SimSun", "Times New Roman", serif;
 }
@@ -31,10 +31,18 @@
 
 body {
   background: var(--bg-primary);
+  background-image:
+    radial-gradient(
+      ellipse 80% 60% at 50% 40%,
+      rgba(201, 168, 76, 0.18) 0%,
+      rgba(240, 230, 210, 0.1) 45%,
+      transparent 80%
+    );
   color: var(--text-primary);
   font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-attachment: fixed;
 }
 
 /* Parchment texture overlay */
@@ -44,12 +52,12 @@ body {
       0deg,
       transparent,
       transparent 30px,
-      rgba(180, 50, 50, 0.015) 30px,
-      rgba(180, 50, 50, 0.015) 31px
+      rgba(168, 132, 44, 0.04) 30px,
+      rgba(168, 132, 44, 0.04) 31px
     ),
     radial-gradient(
       ellipse at 50% 20%,
-      rgba(201, 168, 76, 0.04) 0%,
+      rgba(168, 132, 44, 0.1) 0%,
       transparent 55%
     ),
     var(--bg-primary);
@@ -58,7 +66,7 @@ body {
 /* Gold glow for focused input */
 .input-glow:focus {
   border-color: var(--border-gold-light);
-  box-shadow: 0 0 20px rgba(201, 168, 76, 0.08), 0 0 3px rgba(201, 168, 76, 0.15);
+  box-shadow: 0 0 20px rgba(168, 132, 44, 0.18), 0 0 3px rgba(168, 132, 44, 0.3);
   outline: none;
 }
 
@@ -77,10 +85,10 @@ body {
 /* Breathing glow for emblem */
 @keyframes breathe {
   0%, 100% {
-    box-shadow: 0 0 8px rgba(201, 168, 76, 0.15);
+    box-shadow: 0 0 8px rgba(168, 132, 44, 0.25);
   }
   50% {
-    box-shadow: 0 0 18px rgba(201, 168, 76, 0.3);
+    box-shadow: 0 0 18px rgba(168, 132, 44, 0.5);
   }
 }
 
@@ -150,13 +158,13 @@ body {
 
 /* Selection colors */
 ::selection {
-  background: rgba(201, 168, 76, 0.25);
-  color: var(--gold-light);
+  background: rgba(168, 132, 44, 0.3);
+  color: #2a1a0a;
 }
 
 ::-moz-selection {
-  background: rgba(201, 168, 76, 0.25);
-  color: var(--gold-light);
+  background: rgba(168, 132, 44, 0.3);
+  color: #2a1a0a;
 }
 
 /* Copy button transition */
@@ -194,11 +202,12 @@ body {
   left: 0;
   top: 0;
   bottom: 0;
-  width: 22%;
-  min-width: 160px;
-  max-width: 300px;
-  opacity: 0.4;
+  width: 24%;
+  min-width: 180px;
+  max-width: 320px;
+  opacity: 0.9;
   transition: opacity 0.6s ease;
+  filter: drop-shadow(0 6px 20px rgba(80, 40, 20, 0.4));
 }
 
 .portrait-right {
@@ -206,19 +215,20 @@ body {
   right: 0;
   top: 0;
   bottom: 0;
-  width: 22%;
-  min-width: 160px;
-  max-width: 300px;
-  opacity: 0.4;
+  width: 24%;
+  min-width: 180px;
+  max-width: 320px;
+  opacity: 0.9;
   transition: opacity 0.6s ease;
+  filter: drop-shadow(0 6px 20px rgba(80, 40, 20, 0.4));
 }
 
 @media (max-width: 768px) {
   .portrait-left,
   .portrait-right {
-    opacity: 0.2;
-    width: 15%;
-    min-width: 80px;
+    opacity: 0.6;
+    width: 18%;
+    min-width: 100px;
   }
 }
 

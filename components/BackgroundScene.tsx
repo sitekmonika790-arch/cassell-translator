@@ -2,7 +2,7 @@ export default function BackgroundScene() {
   return (
     <div className="fixed inset-0 pointer-events-none z-0 overflow-hidden">
       {/* Gothic background scene */}
-      <div className="absolute inset-0 flex items-center justify-center opacity-35">
+      <div className="absolute inset-0 flex items-center justify-center opacity-30">
         <svg
           viewBox="0 0 1200 900"
           className="w-full h-full max-w-none"
@@ -156,10 +156,10 @@ export default function BackgroundScene() {
           <rect x="980" y="350" width="35" height="550" fill="#1a0a0a" stroke="#c9a84c" strokeWidth="1" opacity="0.5" />
           <rect x="940" y="420" width="20" height="480" fill="#1a0a0a" stroke="#c9a84c" strokeWidth="0.5" opacity="0.3" />
 
-          {/* Dark vignette edges */}
+          {/* Soft warm vignette edges */}
           <radialGradient id="vig">
             <stop offset="55%" stopColor="transparent" />
-            <stop offset="100%" stopColor="#000" stopOpacity="0.7" />
+            <stop offset="100%" stopColor="#000" stopOpacity="0.15" />
           </radialGradient>
           <rect width="1200" height="900" fill="url(#vig)" />
         </svg>
