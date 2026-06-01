@@ -8,17 +8,17 @@
 }
 
 :root {
-  --bg-primary: #f0e6d2;
-  --bg-secondary: #e5d8be;
-  --bg-card: rgba(255, 250, 240, 0.85);
-  --text-primary: #2a1a0a;
-  --text-secondary: #5a4530;
-  --text-muted: #8a7050;
-  --gold: #a8842c;
-  --gold-light: #c9a84c;
-  --gold-dim: #8a6a3a;
-  --border-gold: rgba(168, 132, 44, 0.35);
-  --border-gold-light: rgba(168, 132, 44, 0.55);
+  --bg-primary: #0a0506;
+  --bg-secondary: #1a0a0c;
+  --bg-card: rgba(14, 7, 9, 0.55);
+  --text-primary: #e8d4af;
+  --text-secondary: #b89a6a;
+  --text-muted: #8a6a4a;
+  --gold: #d4af56;
+  --gold-light: #e8cd7a;
+  --gold-dim: #a8853a;
+  --border-gold: rgba(212, 175, 86, 0.3);
+  --border-gold-light: rgba(212, 175, 86, 0.5);
   --accent-red: rgba(180, 50, 50, 0.15);
   --font-cinzel: "Cinzel", "Georgia", "Times New Roman", serif;
   --font-body: "Georgia", "Noto Serif SC", "SimSun", "Times New Roman", serif;
@@ -31,18 +31,15 @@
 
 body {
   background: var(--bg-primary);
-  background-image:
-    radial-gradient(
-      ellipse 80% 60% at 50% 40%,
-      rgba(201, 168, 76, 0.18) 0%,
-      rgba(240, 230, 210, 0.1) 45%,
-      transparent 80%
-    );
   color: var(--text-primary);
   font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-attachment: fixed;
+}
+
+/* Readable text shadow over character images */
+.text-shadow-soft {
+  text-shadow: 0 1px 6px rgba(0, 0, 0, 0.85), 0 0 2px rgba(0, 0, 0, 0.9);
 }
 
 /* Parchment texture overlay */
@@ -66,7 +63,7 @@ body {
 /* Gold glow for focused input */
 .input-glow:focus {
   border-color: var(--border-gold-light);
-  box-shadow: 0 0 20px rgba(168, 132, 44, 0.18), 0 0 3px rgba(168, 132, 44, 0.3);
+  box-shadow: 0 0 20px rgba(212, 175, 86, 0.2), 0 0 3px rgba(212, 175, 86, 0.35);
   outline: none;
 }
 
@@ -85,10 +82,10 @@ body {
 /* Breathing glow for emblem */
 @keyframes breathe {
   0%, 100% {
-    box-shadow: 0 0 8px rgba(168, 132, 44, 0.25);
+    box-shadow: 0 0 8px rgba(212, 175, 86, 0.25);
   }
   50% {
-    box-shadow: 0 0 18px rgba(168, 132, 44, 0.5);
+    box-shadow: 0 0 18px rgba(212, 175, 86, 0.5);
   }
 }
 
@@ -158,13 +155,13 @@ body {
 
 /* Selection colors */
 ::selection {
-  background: rgba(168, 132, 44, 0.3);
-  color: #2a1a0a;
+  background: rgba(212, 175, 86, 0.3);
+  color: #e8d4af;
 }
 
 ::-moz-selection {
-  background: rgba(168, 132, 44, 0.3);
-  color: #2a1a0a;
+  background: rgba(212, 175, 86, 0.3);
+  color: #e8d4af;
 }
 
 /* Copy button transition */

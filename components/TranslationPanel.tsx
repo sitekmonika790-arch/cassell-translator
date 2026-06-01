@@ -86,22 +86,22 @@ export default function TranslationPanel() {
             value={input}
             onChange={handleInput}
             placeholder="输入文本..."
-            className="flex-1 min-h-[140px] bg-[rgba(255,250,240,0.85)] border border-[rgba(168,132,44,0.4)] rounded-sm
-                       text-[#2a1a0a] text-sm p-4 resize-none
-                       placeholder:text-[#8a7050]
+            className="flex-1 min-h-[140px] bg-[rgba(14,7,9,0.62)] backdrop-blur-sm border border-[rgba(212,175,86,0.4)] rounded-sm
+                       text-[#e8d4af] text-sm p-4 resize-none
+                       placeholder:text-[#8a6a4a]
                        input-glow
                        font-[serif]"
           />
         </div>
 
         {/* Arrow */}
-        <div className="flex sm:flex-col items-center justify-center text-[#a8842c] text-lg select-none shrink-0">
+        <div className="flex sm:flex-col items-center justify-center text-[#d4af56] text-shadow-soft text-lg select-none shrink-0">
           <span className="sm:rotate-0 rotate-90">→</span>
         </div>
 
         {/* Output column */}
         <div className="flex-1 flex flex-col">
-          <div className="relative flex-1 min-h-[140px] bg-[rgba(255,250,240,0.85)] border border-[rgba(168,132,44,0.4)] rounded-sm p-4">
+          <div className="relative flex-1 min-h-[140px] bg-[rgba(14,7,9,0.62)] backdrop-blur-sm border border-[rgba(212,175,86,0.4)] rounded-sm p-4">
             {/* Loading */}
             {status === "loading" && (
               <div className="flex items-center justify-center h-full">
@@ -111,7 +111,7 @@ export default function TranslationPanel() {
 
             {/* Error */}
             {status === "error" && (
-              <p className="text-red-700/80 text-sm text-center font-[serif]">
+              <p className="text-red-300/90 text-sm text-center font-[serif]">
                 {error}
               </p>
             )}
@@ -119,11 +119,11 @@ export default function TranslationPanel() {
             {/* Translation result */}
             {status === "done" && (
               <div>
-                <p className="text-[#2a1a0a] text-sm whitespace-pre-wrap font-[serif]">
+                <p className="text-[#e8d4af] text-sm whitespace-pre-wrap font-[serif]">
                   {output}
                 </p>
                 {alternatives.length > 0 && (
-                  <p className="text-[#5a4530] text-xs mt-2 italic font-[serif]">
+                  <p className="text-[#b89a6a] text-xs mt-2 italic font-[serif]">
                     也作：{alternatives.join("  ·  ")}
                   </p>
                 )}
@@ -132,7 +132,7 @@ export default function TranslationPanel() {
 
             {/* Idle placeholder */}
             {status === "idle" && (
-              <p className="text-[#8a7050] text-sm text-center font-[serif] select-none">
+              <p className="text-[#8a6a4a] text-sm text-center font-[serif] select-none">
                 翻译结果将在此显示
               </p>
             )}
@@ -142,8 +142,9 @@ export default function TranslationPanel() {
           {status === "done" && (
             <button
               onClick={handleCopy}
-              className="copy-btn mt-2 self-end text-[10px] tracking-[0.15em] text-[#5a4530]
-                         border border-[rgba(168,132,44,0.35)] rounded-sm px-3 py-1
+              className="copy-btn mt-2 self-end text-[10px] tracking-[0.15em] text-[#b89a6a]
+                         border border-[rgba(212,175,86,0.35)] rounded-sm px-3 py-1
+                         bg-[rgba(14,7,9,0.5)] backdrop-blur-sm
                          font-[serif] cursor-pointer"
             >
               {copied ? "已复制" : "复制译文"}
