@@ -1,19 +1,42 @@
 import { NextResponse } from "next/server"
 import { detectLanguage } from "@/lib/translate"
 
+const corsHeaders = {
+  "Access-Control-Allow-Origin": "*",
+  "Access-Control-Allow-Methods": "POST, OPTIONS",
+  "Access-Control-Allow-Headers": "Content-Type",
+}
+
+function json(data: unknown, init?: ResponseInit) {
+  return NextResponse.json(data, {
+    ...init,
+    headers: {
+      ...corsHeaders,
+      ...init?.headers,
+    },
+  })
+}
+
+export function OPTIONS() {
+  return new Response(null, {
+    status: 204,
+    headers: corsHeaders,
+  })
+}
+
 export async function POST(request: Request) {
   try {
     const { text } = await request.json()
 
     if (!text || typeof text !== "string" || text.trim().length === 0) {
-      return NextResponse.json(
+      return json(
         { error: "请输入需要翻译的文本" },
         { status: 400 }
       )
     }
 
     if (text.length > 5000) {
-      return NextResponse.json(
+      return json(
         { error: "文本过长，请限制在5000字符以内" },
         { status: 400 }
       )
@@ -27,7 +50,7 @@ export async function POST(request: Request) {
     const res = await fetch(url, { signal: AbortSignal.timeout(10000) })
 
     if (!res.ok) {
-      return NextResponse.json(
+      return json(
         { error: "翻译服务暂时不可用，请稍后重试" },
         { status: 502 }
       )
@@ -52,7 +75,7 @@ export async function POST(request: Request) {
       }
     }
 
-    return NextResponse.json({
+    return json({
       translation,
       from,
       to,
@@ -60,13 +83,13 @@ export async function POST(request: Request) {
     })
   } catch (err) {
     if (err instanceof DOMException && err.name === "TimeoutError") {
-      return NextResponse.json(
+      return json(
         { error: "翻译请求超时，请稍后重试" },
         { status: 504 }
       )
     }
 
-    return NextResponse.json(
+    return json(
       { error: "翻译失败，请稍后重试" },
       { status: 500 }
     )
