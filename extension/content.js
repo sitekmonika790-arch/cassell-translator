@@ -118,18 +118,28 @@
         body: JSON.stringify({ text }),
       })
 
-      const data = await response.json()
-
       if (requestId !== latestRequestId) {
         return
       }
 
-      if (!response.ok) {
-        setError(data.error || "翻译失败，请稍后重试")
+      let data = null
+      try {
+        data = await response.json()
+      } catch (error) {
+        if (requestId !== latestRequestId) {
+          return
+        }
+
+        setError("翻译失败，请稍后重试")
         return
       }
 
-      if (!data.translation || typeof data.translation !== "string") {
+      if (!response.ok) {
+        setError(data && data.error ? data.error : "翻译失败，请稍后重试")
+        return
+      }
+
+      if (!data || !data.translation || typeof data.translation !== "string") {
         setError("翻译失败，请稍后重试")
         return
       }
@@ -182,8 +192,12 @@
       return
     }
 
-    await navigator.clipboard.writeText(currentTranslation)
-    copyButton.textContent = "已复制"
+    try {
+      await navigator.clipboard.writeText(currentTranslation)
+      copyButton.textContent = "已复制"
+    } catch (error) {
+      copyButton.textContent = "复制失败"
+    }
 
     if (copyResetTimer) {
       clearTimeout(copyResetTimer)
