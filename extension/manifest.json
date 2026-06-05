@@ -10,7 +10,7 @@
   },
   "permissions": [],
   "host_permissions": [
-    "https://cassell-translator-jcyv25abj-sitekmonika790-archs-projects.vercel.app/*"
+    "https://cassell-translator.vercel.app/*"
   ],
   "content_scripts": [
     {

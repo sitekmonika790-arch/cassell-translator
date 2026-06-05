@@ -1,6 +1,6 @@
 (() => {
   const CASSELL_EXTENSION_ROOT_ID = "cassell-extension-root"
-  const CASSELL_TRANSLATE_API_URL = "https://cassell-translator-jcyv25abj-sitekmonika790-archs-projects.vercel.app/api/translate"
+  const CASSELL_TRANSLATE_API_URL = "https://cassell-translator.vercel.app/api/translate"
   const CASSELL_DEBOUNCE_MS = 500
 
   if (document.getElementById(CASSELL_EXTENSION_ROOT_ID)) {
@@ -66,7 +66,27 @@
   launcher.textContent = "C"
 
   root.append(panel, launcher)
-  document.documentElement.append(root)
+
+  function ensureMounted() {
+    const target = document.body || document.documentElement
+
+    if (root.parentNode !== target) {
+      target.append(root)
+    }
+  }
+
+  ensureMounted()
+
+  const remountObserver = new MutationObserver(() => {
+    if (!root.isConnected) {
+      ensureMounted()
+    }
+  })
+
+  remountObserver.observe(document.documentElement, {
+    childList: true,
+    subtree: true,
+  })
 
   function setIdle() {
     currentTranslation = ""

@@ -22,6 +22,6 @@
 
 插件调用线上接口：
 
-`https://cassell-translator-jcyv25abj-sitekmonika790-archs-projects.vercel.app/api/translate`
+`https://cassell-translator.vercel.app/api/translate`
 
 如果 Vercel 部署不可用，插件会显示错误提示。
