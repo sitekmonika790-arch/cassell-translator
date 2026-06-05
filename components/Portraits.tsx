@@ -5,14 +5,14 @@ export default function Portraits() {
       <div className="absolute inset-0 flex">
         {/* Left half - Lu Mingfei (路明非) */}
         <img
-          src="/lu-mingfei.jpg"
+          src="/lu-mingfei.png"
           alt=""
           className="w-1/2 h-full object-cover object-top"
           draggable={false}
         />
         {/* Right half - Nono (诺诺 / 陈墨瞳) */}
         <img
-          src="/nono.jpeg"
+          src="/nono.png"
           alt=""
           className="w-1/2 h-full object-cover object-top"
           draggable={false}
