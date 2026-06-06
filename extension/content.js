@@ -1,7 +1,13 @@
-(() => {
+﻿(() => {
   const CASSELL_EXTENSION_ROOT_ID = "cassell-extension-root"
   const CASSELL_TRANSLATE_API_URL = "https://cassell-translator.vercel.app/api/translate"
   const CASSELL_DEBOUNCE_MS = 500
+
+  // Base64 Audio for Norma Terminal
+  const soundOpen = new Audio("data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACAf4B/gH+Af4B/gH+Af4B/gH+Af4B/gH+Af4B/gH+Af4B/gH+Af4B/gH+Af4B/gH+Af4B/gH+Af4B/gH+Af4B/gH+Af4B/gH+Af4B/gH+Af4B/gH+Af4B/gH+Af4B/gH+Af4B/gH8=")
+  const soundSuccess = new Audio("data:audio/wav;base64,UklGRnoGAABXQVZFZm10IBAAAAABAAEAQB8AAEAfAAABAAgAZGF0YQoGAACAf4B/gH+Af4B/gH+Af4B/gH+Af4B/gH+Af4B/gH+Af4B/gH+Af4B/gH+Af4B/gH+Af4B/gH+Af4B/gH+Af4B/gH+Af4B/gH+Af4B/gH+Af4B/gH+Af4B/gH+Af4B/gH+Af4B/gH8=")
+  soundOpen.volume = 0.3
+  soundSuccess.volume = 0.3
 
   if (document.getElementById(CASSELL_EXTENSION_ROOT_ID)) {
     return
@@ -11,6 +17,26 @@
   let latestRequestId = 0
   let currentTranslation = ""
   let copyResetTimer = null
+
+  // Typewriter effect function
+  function typeWriter(element, text, callback) {
+    element.innerHTML = ""
+    let index = 0
+    const cursor = document.createElement("span")
+    cursor.className = "cassell-cursor"
+    element.appendChild(cursor)
+
+    function typeChar() {
+      if (index < text.length) {
+        cursor.before(text.charAt(index))
+        index++
+        setTimeout(typeChar, 30)
+      } else {
+        if (callback) callback()
+      }
+    }
+    typeChar()
+  }
 
   const root = document.createElement("div")
   root.id = CASSELL_EXTENSION_ROOT_ID
@@ -26,13 +52,17 @@
   const title = document.createElement("div")
   title.textContent = "CASSELL TRANSLATOR"
 
+  const greeting = document.createElement("div")
+  greeting.className = "cassell-extension-greeting"
+  greeting.textContent = "> [System] Norma online."
+
   const closeButton = document.createElement("button")
   closeButton.type = "button"
   closeButton.className = "cassell-extension-close"
   closeButton.setAttribute("aria-label", "关闭 Cassell Translator")
   closeButton.textContent = "×"
 
-  header.append(title, closeButton)
+  header.append(title, greeting, closeButton)
 
   const body = document.createElement("div")
   body.className = "cassell-extension-body"
@@ -42,9 +72,17 @@
   input.placeholder = "输入文本..."
   input.setAttribute("aria-label", "需要翻译的文本")
 
+  const outputWrap = document.createElement("div")
+  outputWrap.className = "cassell-extension-output-wrap"
+
   const output = document.createElement("div")
   output.className = "cassell-extension-output cassell-extension-output-idle"
   output.textContent = "翻译结果将在此显示"
+
+  const ripple = document.createElement("div")
+  ripple.className = "cassell-extension-ripple"
+
+  outputWrap.append(output, ripple)
 
   const actions = document.createElement("div")
   actions.className = "cassell-extension-actions"
@@ -56,14 +94,14 @@
   copyButton.hidden = true
 
   actions.append(copyButton)
-  body.append(input, output, actions)
+  body.append(input, outputWrap, actions)
   panel.append(header, body)
 
   const launcher = document.createElement("button")
   launcher.type = "button"
   launcher.className = "cassell-extension-launcher"
   launcher.setAttribute("aria-label", "打开 Cassell Translator")
-  launcher.textContent = "C"
+  launcher.innerHTML = '<svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg"><circle cx="50" cy="50" r="45" fill="none" stroke="currentColor" stroke-width="2"/><path d="M50 10 L50 90 M10 50 L90 50 M20 20 L80 80 M80 20 L20 80" stroke="currentColor" stroke-width="2"/></svg>'
 
   root.append(panel, launcher)
 
@@ -112,10 +150,21 @@
   function setResult(translation, alternatives) {
     currentTranslation = translation
     output.className = "cassell-extension-output"
-    output.textContent = ""
+    output.innerHTML = ""
+
+    // Play success sound
+    try {
+      soundSuccess.currentTime = 0
+      soundSuccess.play().catch(() => {})
+    } catch (e) {}
+
+    // Trigger ripple animation
+    ripple.classList.remove("cassell-extension-ripple-active")
+    void ripple.offsetWidth
+    ripple.classList.add("cassell-extension-ripple-active")
 
     const translationNode = document.createElement("div")
-    translationNode.textContent = translation
+    typeWriter(translationNode, translation)
     output.append(translationNode)
 
     if (Array.isArray(alternatives) && alternatives.length > 0) {
@@ -308,10 +357,21 @@
       savePosition(rect.left, rect.top)
     } else {
       // It was a click, not a drag — toggle panel
+      const wasHidden = panel.hidden
       panel.hidden = !panel.hidden
       if (!panel.hidden) {
         updatePanelPlacement()
         input.focus()
+        
+        // Play open sound and typewrite greeting
+        if (wasHidden) {
+          try {
+            soundOpen.currentTime = 0
+            soundOpen.play().catch(() => {})
+          } catch (e) {}
+          
+          typeWriter(greeting, "> [System] Norma online.")
+        }
       }
     }
   }
