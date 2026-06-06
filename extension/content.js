@@ -204,12 +204,14 @@
   let didDrag = false
 
   function clampPosition(x, y) {
+    const margin = 8
     const size = 56
-    const maxX = window.innerWidth - size
-    const maxY = window.innerHeight - size
+    const maxX = Math.max(margin, window.innerWidth - size - margin)
+    const maxY = Math.max(margin, window.innerHeight - size - margin)
+
     return {
-      x: Math.max(0, Math.min(x, maxX)),
-      y: Math.max(0, Math.min(y, maxY)),
+      x: Math.max(margin, Math.min(x, maxX)),
+      y: Math.max(margin, Math.min(y, maxY)),
     }
   }
 
@@ -217,7 +219,18 @@
     const clamped = clampPosition(x, y)
     root.style.left = clamped.x + "px"
     root.style.top = clamped.y + "px"
+    updatePanelPlacement()
     return clamped
+  }
+
+  function updatePanelPlacement() {
+    const margin = 8
+    const rect = root.getBoundingClientRect()
+    const panelWidth = Math.min(360, Math.max(0, window.innerWidth - 48))
+    const panelHeight = panel.offsetHeight || 320
+
+    root.classList.toggle("cassell-panel-left", rect.right - panelWidth < margin)
+    root.classList.toggle("cassell-panel-below", rect.top - panelHeight - 14 < margin)
   }
 
   function savePosition(x, y) {
@@ -254,7 +267,8 @@
   // Re-clamp on resize
   window.addEventListener("resize", () => {
     const rect = root.getBoundingClientRect()
-    applyPosition(rect.left, rect.top)
+    const pos = applyPosition(rect.left, rect.top)
+    savePosition(pos.x, pos.y)
   })
 
   function onPointerDown(e) {
@@ -296,6 +310,7 @@
       // It was a click, not a drag — toggle panel
       panel.hidden = !panel.hidden
       if (!panel.hidden) {
+        updatePanelPlacement()
         input.focus()
       }
     }
