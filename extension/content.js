@@ -193,13 +193,117 @@
     }, CASSELL_DEBOUNCE_MS)
   }
 
-  launcher.addEventListener("click", () => {
-    panel.hidden = !panel.hidden
+  // --- Drag logic for launcher ---
+  const DRAG_THRESHOLD = 5
+  const POSITION_STORAGE_KEY = "cassell-launcher-position"
+  let isDragging = false
+  let dragStartX = 0
+  let dragStartY = 0
+  let dragOffsetX = 0
+  let dragOffsetY = 0
+  let didDrag = false
 
-    if (!panel.hidden) {
-      input.focus()
+  function clampPosition(x, y) {
+    const size = 56
+    const maxX = window.innerWidth - size
+    const maxY = window.innerHeight - size
+    return {
+      x: Math.max(0, Math.min(x, maxX)),
+      y: Math.max(0, Math.min(y, maxY)),
     }
+  }
+
+  function applyPosition(x, y) {
+    const clamped = clampPosition(x, y)
+    root.style.left = clamped.x + "px"
+    root.style.top = clamped.y + "px"
+    return clamped
+  }
+
+  function savePosition(x, y) {
+    try {
+      localStorage.setItem(POSITION_STORAGE_KEY, JSON.stringify({ x, y }))
+    } catch (e) {
+      // storage unavailable — ignore
+    }
+  }
+
+  function loadPosition() {
+    try {
+      const raw = localStorage.getItem(POSITION_STORAGE_KEY)
+      if (raw) {
+        const pos = JSON.parse(raw)
+        if (typeof pos.x === "number" && typeof pos.y === "number") {
+          return pos
+        }
+      }
+    } catch (e) {
+      // storage unavailable — ignore
+    }
+    return null
+  }
+
+  // Restore saved position or default to bottom-right
+  const savedPos = loadPosition()
+  if (savedPos) {
+    applyPosition(savedPos.x, savedPos.y)
+  } else {
+    applyPosition(window.innerWidth - 56 - 24, window.innerHeight - 56 - 24)
+  }
+
+  // Re-clamp on resize
+  window.addEventListener("resize", () => {
+    const rect = root.getBoundingClientRect()
+    applyPosition(rect.left, rect.top)
   })
+
+  function onPointerDown(e) {
+    // Only primary button
+    if (e.button !== 0) return
+    isDragging = true
+    didDrag = false
+    dragStartX = e.clientX
+    dragStartY = e.clientY
+    const rect = root.getBoundingClientRect()
+    dragOffsetX = e.clientX - rect.left
+    dragOffsetY = e.clientY - rect.top
+    launcher.setPointerCapture(e.pointerId)
+    e.preventDefault()
+  }
+
+  function onPointerMove(e) {
+    if (!isDragging) return
+    const dx = e.clientX - dragStartX
+    const dy = e.clientY - dragStartY
+    if (!didDrag && Math.abs(dx) < DRAG_THRESHOLD && Math.abs(dy) < DRAG_THRESHOLD) {
+      return
+    }
+    didDrag = true
+    root.classList.add("cassell-dragging")
+    applyPosition(e.clientX - dragOffsetX, e.clientY - dragOffsetY)
+  }
+
+  function onPointerUp(e) {
+    if (!isDragging) return
+    isDragging = false
+    root.classList.remove("cassell-dragging")
+
+    if (didDrag) {
+      // Save final position
+      const rect = root.getBoundingClientRect()
+      savePosition(rect.left, rect.top)
+    } else {
+      // It was a click, not a drag — toggle panel
+      panel.hidden = !panel.hidden
+      if (!panel.hidden) {
+        input.focus()
+      }
+    }
+  }
+
+  launcher.addEventListener("pointerdown", onPointerDown)
+  document.addEventListener("pointermove", onPointerMove)
+  document.addEventListener("pointerup", onPointerUp)
 
   closeButton.addEventListener("click", () => {
     panel.hidden = true
