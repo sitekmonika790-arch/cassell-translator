@@ -41,7 +41,7 @@
 /* ==================
    Magic Sigil Launcher Button
    ================== */
-#cassell-launcher {
+.cassell-extension-launcher {
   width: 56px;
   height: 56px;
   background: radial-gradient(circle, rgba(0, 240, 255, 0.2) 0%, transparent 70%);
@@ -56,7 +56,7 @@
   animation: norma-pulse 2s ease-in-out infinite;
 }
 
-#cassell-launcher::before {
+.cassell-extension-launcher::before {
   content: '◈';
   position: absolute;
   top: 50%;
@@ -68,7 +68,7 @@
   animation: norma-spin 8s linear infinite;
 }
 
-#cassell-launcher::after {
+.cassell-extension-launcher::after {
   content: '';
   position: absolute;
   top: -4px;
@@ -81,7 +81,7 @@
   animation: norma-ripple-idle 3s ease-out infinite;
 }
 
-#cassell-launcher:hover {
+.cassell-extension-launcher:hover {
   background: radial-gradient(circle, rgba(0, 240, 255, 0.3) 0%, transparent 70%);
   box-shadow: 
     0 0 30px var(--norma-blue-glow),
@@ -89,7 +89,7 @@
   transform: scale(1.05);
 }
 
-#cassell-launcher:active {
+.cassell-extension-launcher:active {
   transform: scale(0.95);
 }
 
@@ -98,7 +98,10 @@
    ================== */
 .cassell-extension-panel {
   position: absolute;
+  right: 0;
+  bottom: 70px;
   width: 380px;
+  max-width: calc(100vw - 32px);
   max-height: 520px;
   background: var(--norma-dark-panel);
   backdrop-filter: blur(20px) saturate(150%);
@@ -112,6 +115,10 @@
   overflow-y: auto;
   animation: norma-hologram-open 0.6s ease-out forwards;
   pointer-events: auto;
+}
+
+.cassell-extension-panel[hidden] {
+  display: none;
 }
 
 /* CRT Scanlines Effect */
@@ -141,14 +148,14 @@
 }
 
 /* Panel positioning variants */
-.cassell-panel-left {
-  left: 68px;
-  top: 0;
+#cassell-extension-root.cassell-panel-left .cassell-extension-panel {
+  right: auto;
+  left: 0;
 }
 
-.cassell-panel-below {
-  left: 0;
-  top: 68px;
+#cassell-extension-root.cassell-panel-below .cassell-extension-panel {
+  top: 70px;
+  bottom: auto;
 }
 
 /* ==================
@@ -227,6 +234,7 @@
   letter-spacing: 1px;
 }
 
+.cassell-extension-input,
 .cassell-extension-textarea {
   width: 100%;
   min-height: 80px;
@@ -241,6 +249,7 @@
   font-family: inherit;
 }
 
+.cassell-extension-input:focus,
 .cassell-extension-textarea:focus {
   outline: none;
   border-color: var(--norma-blue);
@@ -250,6 +259,7 @@
   background: rgba(0, 0, 0, 0.6);
 }
 
+.cassell-extension-input::placeholder,
 .cassell-extension-textarea::placeholder {
   color: var(--norma-text-dim);
   opacity: 0.5;
@@ -417,6 +427,22 @@
   pointer-events: none;
   opacity: 0;
   border-radius: 4px;
+  animation: norma-ripple 0.8s ease-out forwards;
+}
+
+.cassell-extension-ripple {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  border: 1px solid var(--norma-blue);
+  border-radius: 4px;
+  pointer-events: none;
+  opacity: 0;
+}
+
+.cassell-extension-ripple-active {
   animation: norma-ripple 0.8s ease-out forwards;
 }
 

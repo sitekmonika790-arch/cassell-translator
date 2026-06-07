@@ -1,4 +1,4 @@
-﻿(() => {
+(() => {
   const CASSELL_EXTENSION_ROOT_ID = "cassell-extension-root"
   const CASSELL_TRANSLATE_API_URL = "https://cassell-translator.vercel.app/api/translate"
   const CASSELL_DEBOUNCE_MS = 500
@@ -50,6 +50,7 @@
   header.className = "cassell-extension-header"
 
   const title = document.createElement("div")
+  title.className = "cassell-extension-title"
   title.textContent = "CASSELL TRANSLATOR"
 
   const greeting = document.createElement("div")
